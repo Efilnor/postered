@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postered_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    environment:
+      PORT: 4000
+      DATABASE_URL: postgresql://postgres:password@db:5432/postered_db
+      JWT_SECRET: supersecret
+      NODE_ENV: development
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/db:/app/db
+      - ./backend/uploads:/app/uploads
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:5173"
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - ./frontend/index.html:/app/index.html
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://localhost:4000
+
+volumes:
+  db_data:

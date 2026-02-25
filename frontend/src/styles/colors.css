@@ -1,0 +1,49 @@
+:root {
+  /* Indigo Primary */
+  --primary-indigo: #3f00ff;
+  --indigo-50: #eef2ff;
+  --indigo-100: #e0e7ff;
+  --indigo-200: #c7d2fe;
+  --indigo-500: #6366f1;
+  --indigo-600: #4f46e5;
+  --indigo-700: #4338ca;
+  --indigo-900: #312e81;
+
+  /* Neutral & Text */
+  --slate-800: #1e293b;
+  --text-main: #1a1a1a;
+  --text-muted: #6b7280;
+  --text-light: #9ca3af;
+
+  /* Backgrounds */
+  --bg-white: #ffffff;
+  --bg-light: #f8f9fa;
+  --bg-lighter: #f3f4f6;
+  --bg-glass: rgba(255, 255, 255, 0.85);
+
+  /* Semantic Colors */
+  --success: #10b981;
+  --success-light: #2ed573;
+  --danger: #ff4757;
+  --danger-red: #ef4444;
+  --warning: #f59e0b;
+  --info-blue: #3b82f6;
+  --info-purple: #8b5cf6;
+
+  /* Borders & Shadows */
+  --border-color: rgba(0, 0, 0, 0.06);
+  --border-light: #f0f0f0;
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.03);
+
+  /* Radius */
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+
+  /* Transitions */
+  --transition-standard: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Layout */
+  --max-width: 1400px;
+}

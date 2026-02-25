@@ -1,0 +1,307 @@
+@import './colors.css';
+
+/* Reset */
+html, body, #root, .App, .app-wrapper {
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+  overflow-x: hidden;
+}
+
+.auth-container {
+  display: flex;
+  min-height: 100vh; 
+  width: 100vw;      
+  margin: 0 !important;
+  padding: 0 !important;
+  font-family: "Inter", sans-serif;
+  background-color: var(--bg-lighter);
+  position: absolute; 
+  top: 0;
+  left: 0;
+}
+
+.auth-info-side {
+  flex: 1.2; 
+  background-color: var(--slate-800); 
+  position: relative;
+  overflow: hidden;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Form Side */
+.auth-form-side {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  background-color: var(--bg-lighter);
+  margin: 0;
+}
+
+
+/* --- SECTION GAUCHE : PRÉSENTATION --- */
+.auth-info-side {
+  flex: 1.2; 
+  background-color: var(--slate-800); 
+  position: relative;
+  overflow: hidden;
+  padding: 80px 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: flex-start !important; /* Force l'alignement à gauche */
+  text-align: left !important;
+}
+
+.info-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 550px; 
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start !important; /* Aligne tout le contenu à gauche */
+}
+
+.auth-logo-white {
+  height: 45px;
+  margin-bottom: 40px;
+  align-self: flex-start;
+}
+
+.auth-info-side h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 25px;
+  width: 100%;
+  background: linear-gradient(to right, var(--bg-white), var(--indigo-200));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.auth-info-side p {
+  font-size: 1.2rem;
+  color: var(--indigo-100);
+  margin-bottom: 40px;
+}
+
+.auth-features {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start !important;
+  gap: 15px;
+  width: 100%;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--bg-white); 
+  background: rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* L'effet de lumière (Glow) */
+.auth-info-side::after {
+  content: "";
+  position: absolute;
+  bottom: -50px;
+  right: -50px;
+  width: 400px;
+  height: 400px;
+  background: var(--primary-indigo);
+  filter: blur(150px);
+  opacity: 0.15;
+}
+
+/* Right Side Card */
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-white);
+  padding: 50px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  text-align: left;
+}
+
+.auth-title-compact {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+}
+
+.auth-subtitle {
+  color: var(--text-muted);
+  margin-bottom: 35px;
+  font-size: 0.95rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Form Inputs */
+.input-group-row {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+input {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1.5px solid var(--indigo-100);
+  background-color: var(--bg-light);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  transition: var(--transition-standard);
+  color: var(--text-main);
+}
+
+form input {
+  box-sizing: border-box; /* Pour que le padding ne s'ajoute pas à la largeur */
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary-indigo);
+  background-color: var(--bg-white);
+  box-shadow: 0 0 0 4px rgba(63, 0, 255, 0.1);
+}
+
+/* 1. Le container doit être le point de référence */
+.password-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  padding-right: 45px; 
+}
+
+/* 3. L'icône positionnée précisément */
+.toggle-password {
+  position: absolute;
+  right: 12px;      /* Distance du bord droit */
+  top: 50%;         /* Centrage vertical */
+  transform: translateY(-50%); /* Ajustement parfait du centrage */
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  z-index: 5;       /* S'assure qu'il est au-dessus de l'input */
+  transition: var(--transition-standard);
+}
+
+.toggle-password:hover {
+  color: var(--primary-indigo);
+}
+
+/* Role Selection */
+.role-selection p {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--slate-800);
+  margin-bottom: 10px;
+}
+
+.role-options {
+  display: flex;
+  background: var(--bg-lighter);
+  padding: 4px;
+  border-radius: var(--radius-sm);
+}
+
+.role-options label {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: var(--transition-standard);
+}
+
+.role-options label.active {
+  background: var(--bg-white);
+  color: var(--primary-indigo);
+  box-shadow: var(--shadow-md);
+}
+
+/* Buttons */
+.btn-primary {
+  background-color: var(--primary-indigo);
+  color: var(--bg-white);
+  padding: 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-standard);
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  background-color: var(--indigo-700);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(63, 0, 255, 0.2);
+}
+
+.btn-switch {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  margin-top: 25px;
+  width: 100%;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.btn-switch:hover {
+  color: var(--primary-indigo);
+  text-decoration: underline;
+}
+
+/* Success Card specialized style */
+.success-card .icon {
+  color: var(--success);
+}
+
+@media (max-width: 900px) {
+  .auth-info-side {
+    display: none;
+  }
+  .auth-form-side {
+    padding: 20px;
+    background-color: var(--bg-white);
+  }
+  .auth-card {
+    box-shadow: none;
+    padding: 20px;
+  }
+}
