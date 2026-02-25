@@ -16,6 +16,10 @@ Une fois les containers lancés, exécutez le script de peuplement pour génére
 docker-compose exec backend npm run seed
 ```
 
+Rendez vous à l'adresse suivante et bonne balade sur le projet !
+
+http://localhost:5173/
+
 ## Identifiants de test
 
 | Rôle | Email | Mot de passe |
