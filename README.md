@@ -4,14 +4,20 @@ _Postered_ est un site web permettant de faire le lien entre des illustrateurs e
 ## Installation
 Le projet est entièrement conteneurisé avec Docker pour garantir un environnement stable et prêt à l'emploi.
 
-### 1. Démarrer l'infrastructure
+### 1. Configuration de l'environnement
+Avant de lancer l'infrastructure, vous devez créer votre fichier de configuration local. À la racine du projet, dupliquez le fichier .env.example et renommez-le en .env :
+```bash
+cp .env.example .env
+```
+
+### 2. Démarrer l'infrastructure
 À la racine du projet, exécutez la commande suivante pour construire les images et lancer les services (Base de données, Backend et Frontend) :
 
 ```bash
 docker-compose up -d --build
 ```
 
-### 2. Initialiser les données
+### 3. Initialiser les données
 Une fois les services opérationnels, exécutez le script de peuplement pour générer automatiquement les thèmes, le système de permissions et la galerie de posters :
 
 ```bash
