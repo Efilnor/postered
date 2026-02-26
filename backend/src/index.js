@@ -36,7 +36,7 @@ app.use('/api', globalLimiter);
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10, 
+  max: 50, 
   message: { error: "Trop de tentatives de connexion. Réessayez dans 15 minutes." },
   standardHeaders: true,
   legacyHeaders: false,
