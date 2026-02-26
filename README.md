@@ -26,7 +26,7 @@ docker-compose exec backend npm run seed
 ```
 
 ### Accès au projet
-Une fois ces étapes terminées, rendez-vous sur : http://localhost:3000
+Une fois ces étapes terminées, rendez-vous sur : http://localhost:5173
 
 Bonne balade artistique sur Postered ! ✨
 
