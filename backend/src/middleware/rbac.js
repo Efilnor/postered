@@ -11,7 +11,7 @@ async function requireAuth(req, res, next) {
     const activeSession = await db.Sessions.findOne({ 
       where: { 
         token: token,
-        userId: payload.userId || payload.id // S'adapte selon ton payload
+        userId: payload.userId || payload.id
       } 
     });
 

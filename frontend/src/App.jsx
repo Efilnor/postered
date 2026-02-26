@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import "./styles/App.css";
 
+import axios from 'axios';
+
 export default function App() {
   const location = useLocation();
   const navigate = useNavigate(); 

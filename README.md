@@ -60,7 +60,7 @@ Bonne balade artistique sur Postered ! ✨
 
 Une base de données PostgreSQL est utilisée pour gérer les données du site.
 
-![Schéma de base de données](postered (3).png)
+![Schéma de base de données](postered_database.png)
 
 
 ## Sécurité
