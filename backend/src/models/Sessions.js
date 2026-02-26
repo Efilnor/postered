@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Sessions = sequelize.define('Sessions', {
     token: { 
-      type: DataTypes.STRING, 
+      type: DataTypes.TEXT, 
       primaryKey: true 
     },
     userId: { 
@@ -15,10 +15,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         key: 'id'
       }
-    },
-    expirationDate: { 
-      type: DataTypes.DATE,
-      field: 'expiration_date'
     },
     expiresAt: { 
       type: DataTypes.DATE,

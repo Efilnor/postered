@@ -8,12 +8,15 @@ exports.register = async (req, res) => {
 
   try {
     const existingUser = await db.Users.findOne({ where: { email } });
-    if (existingUser) return res.status(400).json({ error: "Cet email est déjà utilisé" });
+    if (existingUser)
+      return res.status(400).json({ error: "Cet email est déjà utilisé" });
 
     const hash = await bcrypt.hash(password, 10);
     const groupName = group || "UserBuyer";
-    
-    let [targetGroup] = await db.Groups.findOrCreate({ where: { name: groupName } });
+
+    let [targetGroup] = await db.Groups.findOrCreate({
+      where: { name: groupName },
+    });
 
     const user = await db.Users.create({
       email,
@@ -26,12 +29,24 @@ exports.register = async (req, res) => {
     const token = jwt.sign(
       { userId: user.id, email: user.email, group: groupName },
       process.env.JWT_SECRET || "supersecret",
-      { expiresIn: "8h" }
+      { expiresIn: "8h" },
     );
+
+    await db.Sessions.create({
+      token: token,
+      userId: user.id,
+      expiresAt: new Date(Date.now() + 8 * 60 * 60 * 1000),
+      scopes: ["access"],
+    });
 
     res.json({
       token,
-      user: { id: user.id, email: user.email, firstName: user.firstName, group: groupName }
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        group: groupName,
+      },
     });
   } catch (err) {
     res.status(500).json({ error: "Erreur lors de la création du compte" });
@@ -45,11 +60,13 @@ exports.login = async (req, res) => {
   try {
     const user = await db.Users.findOne({
       where: { email },
-      include: [{ 
-        model: db.Groups, 
-        as: "group",
-        include: [{ model: db.Permissions }] 
-      }],
+      include: [
+        {
+          model: db.Groups,
+          as: "group",
+          include: [{ model: db.Permissions }],
+        },
+      ],
     });
 
     if (!user) return res.status(401).json({ error: "Identifiants invalides" });
@@ -57,18 +74,24 @@ exports.login = async (req, res) => {
     const ok = await bcrypt.compare(password, user.password);
     if (!ok) return res.status(401).json({ error: "Identifiants invalides" });
 
-   
-    const permissions = user.group?.Permissions?.map(p => p.name) || [];
+    const permissions = user.group?.Permissions?.map((p) => p.name) || [];
 
     const token = jwt.sign(
       {
         userId: user.id,
         email: user.email,
-        permissions: permissions 
+        permissions: permissions,
       },
       process.env.JWT_SECRET || "supersecret",
-      { expiresIn: "8h" }
+      { expiresIn: "8h" },
     );
+
+    await db.Sessions.create({
+      token: token,
+      userId: user.id,
+      expiresAt: new Date(Date.now() + 8 * 60 * 60 * 1000),
+      scopes: ["access"],
+    });
 
     res.json({
       token,
@@ -76,11 +99,18 @@ exports.login = async (req, res) => {
         id: user.id,
         email: user.email,
         firstName: user.firstName,
-        permissions: permissions
+        permissions: permissions,
       },
     });
   } catch (err) {
-    res.status(500).json({ error: "Erreur interne lors de la connexion" });
+    console.error("ERREUR DETECTEE LORS DU LOGIN :");
+    console.error(err);
+    res
+      .status(500)
+      .json({
+        error: "Erreur interne lors de la connexion",
+        details: err.message,
+      });
   }
 };
 
@@ -89,7 +119,7 @@ exports.updateProfile = async (req, res) => {
   try {
     const { pseudo, password } = req.body;
     const user = await db.Users.findByPk(req.user.userId, {
-      include: [{ model: db.Groups, as: "group" }]
+      include: [{ model: db.Groups, as: "group" }],
     });
 
     if (!user) return res.status(404).json({ error: "Utilisateur non trouvé" });
@@ -107,7 +137,7 @@ exports.updateProfile = async (req, res) => {
         lastName: user.lastName,
         email: user.email,
         pseudo: user.pseudo,
-        group: user.group?.name || "Guest"
+        group: user.group?.name || "Guest",
       },
     });
   } catch (err) {
@@ -163,8 +193,20 @@ exports.getProfile = async (req, res) => {
     const itemsForThisOrder = await db.OrderItems.findAll({
       where: { orderId: 1 },
     });
-
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+exports.logout = async (req, res) => {
+  try {
+    const auth = req.headers.authorization;
+    const token = auth.slice(7);
+
+    await db.Sessions.destroy({ where: { token } });
+
+    res.json({ message: "Déconnexion réussie" });
+  } catch (err) {
+    res.status(500).json({ error: "Erreur lors de la déconnexion" });
   }
 };

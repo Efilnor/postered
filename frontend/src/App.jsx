@@ -24,12 +24,23 @@ export default function App() {
   const storedUser = JSON.parse(localStorage.getItem("user"));
   const perms = storedUser?.permissions || [];
 
-  // Fonction de déconnexion
-  const handleLogout = () => {
+const handleLogout = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    
+    if (token) {
+      await axios.post("http://localhost:4000/auth/logout", {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    }
+  } catch (err) {
+    console.error("Erreur lors de la déconnexion backend", err);
+  } finally {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/login");
-  };
+  }
+};
 
   return (
     <div className="app-wrapper">

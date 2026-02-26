@@ -236,6 +236,7 @@ async function seedDatabase() {
     // ==================== CREATE USERS ====================
     console.log("\n👤 Creating test users...");
     const users = {};
+    const jwt = require("jsonwebtoken");
 
     const userData = [
       {
@@ -268,6 +269,8 @@ async function seedDatabase() {
       },
     ];
 
+    await db.Sessions.sync({ force: true });
+
     for (const u of userData) {
       const hashedPassword = await bcrypt.hash(u.password, 10);
       const [user] = await db.Users.findOrCreate({
@@ -281,7 +284,21 @@ async function seedDatabase() {
         },
       });
       users[u.email] = user;
-      console.log(`  ✓ ${u.email} (${u.group})`);
+      const token = jwt.sign(
+        { id: user.id, email: user.email }, 
+        process.env.JWT_SECRET || 'supersecret', 
+        { expiresIn: '8h' }
+      );
+
+      await db.Sessions.create({
+        token: token,
+        userId: user.id,
+        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // Expire dans 24h
+        scopes: ['access']
+      });
+
+      console.log(`  ✓ ${u.email} (${u.group}) + Session created`);
+    
     }
 
     // ==================== CREATE SAMPLE DATA ====================
@@ -310,8 +327,6 @@ async function seedDatabase() {
         status: "PENDING",
         sizeId: sizes.A3.id,
         validatorId: null,
-
-
       },
       {
         title: "Night City Lights",
@@ -339,7 +354,8 @@ async function seedDatabase() {
         title: "The Tarnished One",
         description: "Inspiré par Elden Ring, le voyage vers l'Arbre-Monde.",
         price: 49.0,
-        imageUrl: "https://res.cloudinary.com/cook-becker/image/fetch/q_auto:best,f_auto,w_1920,g_center/https://candb.com/site/candb/images/article/Godfrey.jpg",
+        imageUrl:
+          "https://res.cloudinary.com/cook-becker/image/fetch/q_auto:best,f_auto,w_1920,g_center/https://candb.com/site/candb/images/article/Godfrey.jpg",
         themeId: themes["Dark Fantasy"].id,
         status: "APPROVED",
         sizeId: sizes.A2.id,
@@ -348,8 +364,9 @@ async function seedDatabase() {
       {
         title: "Spirited Away: Bathhouse",
         description: "L'élégance onirique du chef-d'œuvre de Miyazaki.",
-        price: 32.50,
-        imageUrl: "https://static.wikia.nocookie.net/studio-ghibli/images/8/80/Chihiro_sees_the_Bathhouse.png/revision/latest?cb=20200914124155",
+        price: 32.5,
+        imageUrl:
+          "https://static.wikia.nocookie.net/studio-ghibli/images/8/80/Chihiro_sees_the_Bathhouse.png/revision/latest?cb=20200914124155",
         themeId: themes["Anime"].id,
         status: "APPROVED",
         sizeId: sizes.A3.id,
@@ -359,8 +376,9 @@ async function seedDatabase() {
         title: "Into the Spider-Verse",
         description: "Miles Morales plonge dans le chaos du multivers.",
         price: 38.0,
-        imageUrl: "https://cdn.displate.com/artwork/460x640/2025-11-10/d74842503806aa8511707f4de8b6eb83_fcc5c31bfee0c6ead3af8b040d7c60a1.jpg",
-        themeId: themes["Cyberpunk"].id, 
+        imageUrl:
+          "https://cdn.displate.com/artwork/460x640/2025-11-10/d74842503806aa8511707f4de8b6eb83_fcc5c31bfee0c6ead3af8b040d7c60a1.jpg",
+        themeId: themes["Cyberpunk"].id,
         status: "APPROVED",
         sizeId: sizes.A2.id,
         validatorId: users["manager@postered.com"].id,
@@ -369,14 +387,15 @@ async function seedDatabase() {
         title: "The Last of Us Part II",
         description: "Une Ellie déterminée dans la verdure post-apocalyptique.",
         price: 40.0,
-        imageUrl: "https://cdnb.artstation.com/p/assets/images/images/028/576/365/large/brandon-meier-ellie-and-dina-ml.jpg?1594858855",
+        imageUrl:
+          "https://cdnb.artstation.com/p/assets/images/images/028/576/365/large/brandon-meier-ellie-and-dina-ml.jpg?1594858855",
         themeId: themes["Dark Fantasy"].id,
         status: "PENDING",
         sizeId: sizes.A2.id,
         validatorId: null,
-      }
+      },
     ];
-await db.Designs.sync({ force: true }); 
+    await db.Designs.sync({ force: true });
 
     for (const d of designData) {
       const design = await db.Designs.create({
@@ -392,17 +411,17 @@ await db.Designs.sync({ force: true });
         validatedAt: d.status === "APPROVED" ? new Date() : null,
       });
 
-      // Si tu as des tables de liaison Many-to-Many, garde ceci, 
+      // Si tu as des tables de liaison Many-to-Many, garde ceci,
       // sinon si c'est du BelongsTo (Foreign Key simple), c'est déjà fait au-dessus.
-      if (d.sizeId && typeof design.addSize === "function") await design.addSize(d.sizeId);
-      if (d.themeId && typeof design.addTheme === "function") await design.addTheme(d.themeId);
+      if (d.sizeId && typeof design.addSize === "function")
+        await design.addSize(d.sizeId);
+      if (d.themeId && typeof design.addTheme === "function")
+        await design.addTheme(d.themeId);
 
       designs.push(design);
       console.log(`  ✓ ${d.title} (${d.status})`);
     }
-    console.log(
-      "Done !",
-    );
+    console.log("Done !");
 
     process.exit(0);
   } catch (error) {
