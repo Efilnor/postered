@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { Check, Loader2 } from "lucide-react"; // Pour les icônes d'animation
+import { Check, Loader2 } from "lucide-react";
 import axios from "axios";
 import "../styles/DesignDetail.css";
 
@@ -12,9 +12,8 @@ const DesignDetail = () => {
   const location = useLocation();
   const [user, setUser] = useState(null);
 
-  // Nouveaux états pour la logique moderne
   const [selectedSize, setSelectedSize] = useState("A3");
-  const [buttonState, setButtonState] = useState("idle"); // 'idle' | 'loading' | 'success'
+  const [buttonState, setButtonState] = useState("idle");
 
   const sizes = [
     { id: "A4", label: "A4 (21x29.7cm)", extra: 0 },
@@ -26,13 +25,11 @@ const DesignDetail = () => {
     const token = localStorage.getItem("token");
 
     if (!token) {
-      // Pas connecté ? On redirige vers login en mémorisant l'URL actuelle
       alert("Veuillez vous connecter pour ajouter au panier.");
       navigate("/login", { state: { from: location.pathname } });
       return;
     }
 
-    // Si connecté, on appelle ta fonction addToCart existante
     addToCart();
   };
 
@@ -41,18 +38,15 @@ const DesignDetail = () => {
 
     setButtonState("loading");
 
-    // On simule un petit délai réseau pour l'effet "chargement"
     setTimeout(() => {
       const existingCart = JSON.parse(localStorage.getItem("cart")) || [];
-
-      // On calcule le prix final selon la taille
       const sizeInfo = sizes.find((s) => s.id === selectedSize);
       const finalPrice = Number(design.basePrice) + sizeInfo.extra;
 
       const updatedCart = [
         ...existingCart,
         {
-          cartId: Date.now(), // ID unique pour pouvoir en acheter plusieurs
+          cartId: Date.now(), 
           id: design.id,
           title: design.title,
           price: finalPrice,
@@ -66,7 +60,6 @@ const DesignDetail = () => {
 
       setButtonState("success");
 
-      // On remet le bouton à l'état normal après 2 secondes
       setTimeout(() => setButtonState("idle"), 2000);
     }, 800);
   };

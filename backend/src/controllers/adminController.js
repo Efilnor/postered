@@ -1,12 +1,12 @@
 const db = require("../models");
 
+// Récupérer les statistique du site
 exports.getAdminStats = async (req, res) => {
   try {
     const totalUsers = await db.Users.count();
     const totalOrders = await db.Orders.count();
     const totalRevenue = await db.Orders.sum('totalPrice') || 0;
     
-    // Récupérer tous les utilisateurs avec leur groupe
     const users = await db.Users.findAll({
       attributes: ['id', 'firstName', 'lastName', 'email', 'createdAt'],
       include: [{ model: db.Groups, as: 'group', attributes: ['name'] }],
@@ -22,6 +22,7 @@ exports.getAdminStats = async (req, res) => {
   }
 };
 
+// Changer le rôle de l'utilisateur
 exports.updateUserRole = async (req, res) => {
   const { userId } = req.params;
   const { role } = req.body;

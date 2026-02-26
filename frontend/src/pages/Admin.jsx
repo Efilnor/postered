@@ -14,7 +14,7 @@ const Admin = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       setStats(res.data.stats);
-      setUsers(res.data.users || []); // Sécurité : fallback sur tableau vide
+      setUsers(res.data.users || []); 
     } catch (err) {
       console.error("Erreur chargement admin:", err);
     }

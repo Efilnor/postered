@@ -9,7 +9,6 @@ const Cart = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Charger le panier au montage du composant
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem("cart")) || [];
     setCartItems(items);
@@ -19,29 +18,24 @@ const Cart = () => {
     setLoading(true);
     const token = localStorage.getItem("token");
 
-    // On prépare les données de la commande
     const orderData = {
       items: cartItems.map((item) => ({
-        designId: item.id, // L'ID du design
-        price: item.price, // Le prix unitaire (TRÈS IMPORTANT pour unitPrice)
+        designId: item.id, 
+        price: item.price, 
         quantity: 1,
-        sizeId: item.sizeId || 1, // L'ID de la taille
+        sizeId: item.sizeId || 1, 
       })),
       totalAmount: total,
     };
 
     try {
-      // 1. Envoi au backend pour enregistrer la commande
       await axios.post("http://localhost:4000/api/orders", orderData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // 2. Vider le panier localement (State + LocalStorage)
       setCartItems([]);
       localStorage.removeItem("cart");
 
-      // 3. Redirection vers une page de confirmation
-      // Tu peux créer une route "/order-success"
     } catch (err) {
       alert("Erreur lors de la validation de la commande");
     } finally {
@@ -49,13 +43,10 @@ const Cart = () => {
     }
   };
 
-  // Supprimer un article spécifique via son cartId unique
   const removeFromCart = (cartId) => {
     const updatedCart = cartItems.filter((item) => item.cartId !== cartId);
     setCartItems(updatedCart);
     localStorage.setItem("cart", JSON.stringify(updatedCart));
-
-    // Notifier le reste de l'app (pour le badge du header)
     window.dispatchEvent(new Event("cartUpdate"));
   };
 
@@ -103,7 +94,6 @@ const Cart = () => {
               <div className="item-details">
                 <div className="item-main">
                   <h3>{item.title}</h3>
-                  {/* Affichage du format choisi */}
                   <span className="badge-size">Format {item.size}</span>
                 </div>
                 <div className="item-price-section">

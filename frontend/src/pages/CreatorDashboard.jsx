@@ -9,7 +9,7 @@ import "../styles/CreatorDashboard.css";
 export default function CreatorDashboard() {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [myWorks, setMyWorks] = useState([]); // Initialisé par défaut
+  const [myWorks, setMyWorks] = useState([]);
   const [themes, setThemes] = useState([]);
   const [preview, setPreview] = useState(null);
 
@@ -35,7 +35,6 @@ export default function CreatorDashboard() {
         ]);
 
         if (designsResult.status === "fulfilled") {
-          // Sécurité : s'assurer que c'est un tableau
           setMyWorks(Array.isArray(designsResult.value.data) ? designsResult.value.data : []);
         }
 
@@ -79,7 +78,6 @@ export default function CreatorDashboard() {
         },
       });
       setShowModal(false);
-      // Au lieu de reload(), on pourrait fetch à nouveau pour plus de fluidité
       window.location.reload(); 
     } catch (err) {
       alert("Erreur : " + (err.response?.data?.error || err.message));
@@ -88,7 +86,6 @@ export default function CreatorDashboard() {
     }
   };
 
-  // Calcul des stats (avec sécurité Number)
   const totalEarnings = myWorks.reduce((acc, curr) => acc + (Number(curr.salesCount || 0) * Number(curr.basePrice || 0)), 0);
   const totalSales = myWorks.reduce((acc, curr) => acc + Number(curr.salesCount || 0), 0);
 
@@ -151,7 +148,6 @@ export default function CreatorDashboard() {
                 <p className="work-description">{item.description || "Aucune description."}</p>
                 
                 <div className="work-meta">
-                  {/* Utilisation dynamique des classes CSS : approved, pending, rejected */}
                   <div className={`status-pill ${item.status?.toLowerCase()}`}>
                     {item.status === "APPROVED" && <CheckCircle2 size={14} />}
                     {item.status === "PENDING" && <Clock size={14} />}

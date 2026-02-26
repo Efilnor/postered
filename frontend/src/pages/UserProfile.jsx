@@ -42,9 +42,6 @@ const UserProfile = () => {
         const res = await axios.get("http://localhost:4000/auth/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
-
-        console.log("Données reçues du serveur :", res.data); // <--- AJOUTE ÇA
-
         const userData = res.data.user;
         setUser(userData);
         setOrders(res.data.orders || []);
@@ -185,7 +182,6 @@ const UserProfile = () => {
                           {order.status}
                         </span>
                         <span className="order-price">
-                          {/* Utilisation de totalPrice (nom de ta colonne DB) */}
                           {Number(order.totalPrice || 0).toFixed(2)} €
                         </span>
                         <ChevronDown
@@ -195,10 +191,8 @@ const UserProfile = () => {
                       </div>
                     </div>
 
-                    {/* Détails des articles si la commande est ouverte */}
                     {expandedOrder === order.id && (
                       <div className="order-details-expanded">
-                        {/* Vérification que items existe et n'est pas vide */}
                         {order.items && order.items.length > 0 ? (
                           order.items.map((item, idx) => (
                             <div key={idx} className="order-sub-item">

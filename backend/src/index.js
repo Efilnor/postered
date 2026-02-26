@@ -1,6 +1,8 @@
 require('dotenv').config();
 const express = require('express');
+const helmet = require('helmet');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit')
 const authRoutes = require('./routes/auth');
 const apiRoutes = require('./routes/api');
 const designsRoutes = require('./routes/designs')
@@ -10,10 +12,37 @@ const adminRoutes = require('./routes/admin')
 const { ensureDbInitialized } = require('../db/init');
 
 const app = express();
-app.use(cors());
+
+app.set('trust proxy', 1);
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
+app.use(helmet());
 app.use(express.json());
 
-app.use('/auth', authRoutes);
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: { error: "Trop de requêtes, veuillez réessayer plus tard." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+app.use('/api', globalLimiter);
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10, 
+  message: { error: "Trop de tentatives de connexion. Réessayez dans 15 minutes." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use('/auth', authLimiter, authRoutes);
 app.use('/api', apiRoutes);
 app.use('/api/designs', designsRoutes);
 app.use('/api/themes', themesRoutes);

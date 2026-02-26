@@ -376,33 +376,30 @@ async function seedDatabase() {
         validatorId: null,
       }
     ];
+await db.Designs.sync({ force: true }); 
 
     for (const d of designData) {
-      const [design] = await db.Designs.findOrCreate({
-        where: { title: d.title },
-        defaults: {
-          title: d.title,
-          description: d.description,
-          imageUrl: d.imageUrl,
-          designerId: users["creator@postered.com"].id,
-          basePrice: d.price,
-          status: d.status,
-          themeId: d.themeId,
-          sizeId: d.sizeId,
-          validatorId: d.validatorId,
-          validatedAt: d.status === "APPROVED" ? new Date() : null,
-        },
+      const design = await db.Designs.create({
+        title: d.title,
+        description: d.description,
+        imageUrl: d.imageUrl,
+        designerId: users["creator@postered.com"].id,
+        basePrice: d.price,
+        status: d.status,
+        themeId: d.themeId,
+        sizeId: d.sizeId,
+        validatorId: d.validatorId,
+        validatedAt: d.status === "APPROVED" ? new Date() : null,
       });
 
-      if (d.sizeId && typeof design.addSize === "function")
-        await design.addSize(d.sizeId);
-      if (d.themeId && typeof design.addTheme === "function")
-        await design.addTheme(d.themeId);
+      // Si tu as des tables de liaison Many-to-Many, garde ceci, 
+      // sinon si c'est du BelongsTo (Foreign Key simple), c'est déjà fait au-dessus.
+      if (d.sizeId && typeof design.addSize === "function") await design.addSize(d.sizeId);
+      if (d.themeId && typeof design.addTheme === "function") await design.addTheme(d.themeId);
 
       designs.push(design);
       console.log(`  ✓ ${d.title} (${d.status})`);
     }
-
     console.log(
       "Done !",
     );

@@ -68,12 +68,11 @@ const Auth = () => {
 
   return (
     <div className="auth-container">
-      {/* SECTION GAUCHE : PRÉSENTATION */}
       <div className="auth-info-side">
         <div className="info-content">
           <img src="/white-title.png" alt="Postered" className="auth-logo-white" />
-          <h1>L'art du métal, <br/>le style en plus.</h1>
-          <p>Rejoignez la plus grande communauté de collectionneurs de posters métalliques premium.</p>
+          <h1>L'art du poster, <br/>le style en plus.</h1>
+<p>Rejoignez la plus grande communauté de collectionneurs d'œuvres et de posters premium.</p>
           
           <div className="auth-features">
             <div className="feature"><CheckCircle2 size={18}/> Qualité Ultra HD</div>
@@ -83,13 +82,12 @@ const Auth = () => {
         </div>
       </div>
 
-      {/* SECTION DROITE : FORMULAIRE */}
       <div className="auth-form-side">
         <div className="auth-card">
           <h2 className="auth-title-compact">{isLogin ? "Connexion" : "Créer un compte"}</h2>
           <p className="auth-subtitle">Accédez à votre galerie personnalisée</p>
 
-          {error && <div className="error-bubble">⚠️ {error}</div>}
+          {error && <div className="error-bubble">{error}</div>}
 
           <form onSubmit={handleSubmit}>
             {!isLogin && (

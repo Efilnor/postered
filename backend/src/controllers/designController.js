@@ -2,6 +2,7 @@ const db = require("../models");
 
 // Récupérer les designs du créateur connecté
 exports.getMyDesigns = async (req, res) => {
+  console.log("Fetching designs for User ID:", req.user.userId); // 👈 LOG DE DEBUG
   try {
     const designs = await db.Designs.findAll({
       where: { designerId: req.user.userId },

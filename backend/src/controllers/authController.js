@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const db = require("../models");
 
+// Enregistre un nouvel utilisateur
 exports.register = async (req, res) => {
   const { email, password, firstName, lastName, group } = req.body;
 
@@ -37,6 +38,7 @@ exports.register = async (req, res) => {
   }
 };
 
+// Login
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -78,10 +80,11 @@ exports.login = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error("🔥 ERREUR CRITIQUE LOGIN :", err); // Regarde tes logs serveurs !
     res.status(500).json({ error: "Erreur interne lors de la connexion" });
   }
 };
+
+// Mise à jour du profile (principalement pour le mot de passe)
 exports.updateProfile = async (req, res) => {
   try {
     const { pseudo, password } = req.body;
@@ -112,6 +115,7 @@ exports.updateProfile = async (req, res) => {
   }
 };
 
+// Récupération du profil
 exports.getProfile = async (req, res) => {
   try {
     const userId = req.user.userId || req.user.id;
@@ -155,14 +159,12 @@ exports.getProfile = async (req, res) => {
       orders: plainUser.orders || [],
     });
 
-    // TEST DE DEBUG DANS authController.js
     const totalItemsInDb = await db.OrderItems.count();
     const itemsForThisOrder = await db.OrderItems.findAll({
       where: { orderId: 1 },
-    }); // Remplace 1 par l'ID de ta commande
+    });
 
   } catch (err) {
-    console.error("DEBUG PROFILE ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 };

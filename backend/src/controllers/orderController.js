@@ -3,6 +3,7 @@ const Order = db.Orders;
 const OrderItem = db.OrderItems;
 const Design = db.Designs;
 
+// Créer une commande
 exports.createOrder = async (req, res) => {
   const t = await db.sequelize.transaction();
 
@@ -25,7 +26,7 @@ exports.createOrder = async (req, res) => {
           designId: item.designId || item.id,
           sizeId: item.sizeId || 1,
           quantity: item.quantity || 1,
-          unitPrice: parseFloat(Number(item.unitPrice || item.price).toFixed(2)), // Accepte les deux formats
+          unitPrice: parseFloat(Number(item.unitPrice || item.price).toFixed(2)),
         },
         { transaction: t },
       );
@@ -52,6 +53,7 @@ exports.createOrder = async (req, res) => {
   }
 };
 
+// Récupération des ventes 
 exports.getCreatorSales = async (req, res) => {
   try {
     const creatorId = req.user.id;
@@ -80,9 +82,6 @@ exports.getCreatorSales = async (req, res) => {
         });
       }
     }
-
-    
-
     res.status(200).json(mySales);
   } catch (error) {
     res

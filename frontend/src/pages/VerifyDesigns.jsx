@@ -44,7 +44,6 @@ export default function VerifyDesigns() {
         { headers: { Authorization: `Bearer ${token}` } },
       );
 
-      // Retirer du dashboard local
       const updated = designs.filter((d) => d.id !== id);
       setDesigns(updated);
       setSelectedDesign(updated[0] || null);
