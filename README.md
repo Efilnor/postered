@@ -51,9 +51,31 @@ Bonne balade artistique sur Postered ! ✨
 
 ## Sécurité
 
+### Utilisation de Helmet et CORS
+
+J'ai installé Helmet pour protéger l'application en cachant les infos sensibles du serveur (comme le fait qu'on utilise Express) et en ajoutant des en-têtes de sécurité. Pour le CORS, j'ai configuré le serveur pour qu'il n'accepte que les requêtes venant de mon frontend (`localhost:5173`), ce qui bloque les tentatives de connexion pirate depuis d'autres sites.
+
+### Utilisation de Rate Limit
+
+Pour éviter les attaques de type _brut-force_, j'ai mis en place Rate Limit. Il y a une limite globale pour tout le site, et une limite beaucoup plus stricte sur la page de connexion. 
 
 
+### Autres
+
+Tous les mots de passe sont hachés par Bcrypt avant d'être enregistrés en base de données. 
+
+J'ai fait attention à valider tout ce qu'envoie l'utilisateur pour éviter les injections XML et SQL. Les injections SQL sont déjà bien sécurisées par l'utilisation de Sequelize. 
+
+J'ai aussi utiliser `npm audit` pour surveiller et corriger les vulnérabilités dans les bibliothèques utilisées. 
 
 
+## Améliorations futures
 
-## Structure du projet 
+Il resterait quelques points à mettre en place pour respecter l'idée de départ et utiliser toutes les permissions inscrites par groupes. 
+
+Par exemple, un créateur de poster peut modifier un de ces designs (le titre, la description, le prix...). Ou un administrateur devrait pouvoir supprimer des utilisateurs. 
+
+
+## Utilisation de l'IA
+
+L'intelligence artificielle a été utilisée dans ce projet pour la génération du script `seed.js`, et aidé à la création du frontend et à la correction d'erreur. 
