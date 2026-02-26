@@ -5,9 +5,10 @@ _Postered_ est un site web permettant de faire le lien entre des illustrateurs e
 Le projet est entièrement conteneurisé avec Docker pour garantir un environnement stable et prêt à l'emploi.
 
 ### 1. Configuration de l'environnement
-Avant de lancer l'infrastructure, vous devez créer votre fichier de configuration local. À la racine du projet, dupliquez le fichier .env.example et renommez-le en .env :
+Avant de lancer l'infrastructure, vous devez créer votre fichier de configuration local. À la racine du projet, dupliquez le fichier .env.example (qui se trouve dans le backend) et renommez-le en .env :
+
 ```bash
-cp .env.example .env
+cp backend/.env.example backend/.env
 ```
 
 ### 2. Démarrer l'infrastructure
@@ -54,6 +55,13 @@ Bonne balade artistique sur Postered ! ✨
 | UserBuyer | Peut acheter un design | self:*, order:create, order:read |
 | UserCreator | Peut ajouter un design et acheter un design | self:*, order:create, order:read, design:create, design:update (own) |
 | DesignManager | Peut supprimer et modifier des designs existants | design:update (tous), design:delete (tous), design:publish |
+
+## Base de données
+
+Une base de données PostgreSQL est utilisée pour gérer les données du site.
+
+![Schéma de base de données](postered (3).png)
+
 
 ## Sécurité
 
