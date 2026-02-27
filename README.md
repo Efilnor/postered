@@ -12,7 +12,7 @@ cp backend/.env.example backend/.env
 ```
 
 ### 2. Démarrer l'infrastructure
-À la racine du projet, exécutez la commande suivante pour construire les images et lancer les services (Base de données, Backend et Frontend) :
+Exécutez ensuite la commande suivante pour construire les images et lancer les services (backend, frontend et BDD) :
 
 ```bash
 docker-compose up -d --build
