@@ -22,7 +22,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 app.use(express.json());
 
 const globalLimiter = rateLimit({
